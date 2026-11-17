@@ -225,13 +225,22 @@ def get_dashboard(db: Session = Depends(get_db)):
     }
 
 
-# Frontend Servido directamente
-FRONTEND_INDEX = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "dist", "index.html")
-)
+from fastapi.staticfiles import StaticFiles
 
-@app.get("/", include_in_schema=False)
-def serve_root():
+# Frontend Servido directamente desde la compilacion de Angular
+DIST_PATH = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "dist", "black_and_white_barber_shop")
+)
+FRONTEND_INDEX = os.path.join(DIST_PATH, "index.html")
+
+if os.path.isdir(DIST_PATH):
+    app.mount("/assets", StaticFiles(directory=os.path.join(DIST_PATH, "assets")), name="assets")
+
+@app.get("/{full_path:path}", include_in_schema=False)
+def serve_spa(full_path: str):
+    file_candidate = os.path.join(DIST_PATH, full_path)
+    if os.path.isfile(file_candidate):
+        return FileResponse(file_candidate)
     if os.path.isfile(FRONTEND_INDEX):
         return FileResponse(FRONTEND_INDEX)
-    return HTMLResponse("<h1>Black & White Studio API activa en Puerto 8002</h1>")
+    return HTMLResponse("<h1>Black & White Studio API activa en Puerto 8003</h1>")
