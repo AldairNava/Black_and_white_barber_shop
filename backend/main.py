@@ -15,7 +15,7 @@ from integrations import WhatsAppDispatcher
 app = FastAPI(
     title="Black & White Studio API",
     version="1.0.0",
-    description="Backend para Black & White Barber, Beauty & Academy (Puerto 8002)",
+    description="Backend para Black & White Barber, Beauty & Academy (Puerto 8003)",
 )
 
 app.add_middleware(
@@ -60,7 +60,7 @@ def health():
         "status": "online",
         "studio": "Black & White Studio",
         "divisions": ["Barber", "Beauty", "Academy"],
-        "port": 8002,
+        "port": 8003,
         "timestamp": datetime.now().isoformat(),
     }
 

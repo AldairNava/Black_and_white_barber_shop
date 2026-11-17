@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit {
     if (!this.selectedService) return;
 
     try {
-      const response = await fetch('http://localhost:8002/api/appointments', {
+      const response = await fetch('http://localhost:8003/api/appointments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
