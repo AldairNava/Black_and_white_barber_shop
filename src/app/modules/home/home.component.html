@@ -1,1 +1,184 @@
-<p>home works!</p>
+<div class="bw-container">
+  <!-- Top Hero Header -->
+  <header class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="logo-badge">
+        <img src="assets/logo_barber.jpg" alt="Black & White Studio" class="studio-logo" />
+      </div>
+      <h1 class="gold-gradient-text studio-title">BLACK & WHITE STUDIO</h1>
+      <p class="studio-subtitle">BARBER · BEAUTY · ACADEMY</p>
+      <div class="tagline-badge">
+        <span>✨ Profesionalismo, Experiencia y Calidad</span>
+      </div>
+      
+      <!-- Stats Summary -->
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num">389+</span>
+          <span class="stat-label">Clientes Satisfechos</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">3</span>
+          <span class="stat-label">Divisiones Exclusivas</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">100%</span>
+          <span class="stat-label">Atención Personalizada</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs / Divisions -->
+  <section class="divisions-nav">
+    <button [class.active]="activeTab === 'barber'" (click)="activeTab = 'barber'">
+      💈 Black & White Barber
+    </button>
+    <button [class.active]="activeTab === 'beauty'" (click)="activeTab = 'beauty'">
+      ✨ Black & White Beauty
+    </button>
+    <button [class.active]="activeTab === 'academy'" (click)="activeTab = 'academy'">
+      🎓 Black & White Academy
+    </button>
+  </section>
+
+  <!-- Content Section based on Tab -->
+  <main class="main-content">
+    <!-- BARBER DIVISION -->
+    <div *ngIf="activeTab === 'barber'" class="division-view">
+      <div class="division-header">
+        <h2 class="gold-gradient-text">Barbería Tradicional & Moderna</h2>
+        <p>Cortes clásicos, desvanecidos limpios, grecas de alta definición y ritual de toalla caliente.</p>
+      </div>
+
+      <!-- Services Grid -->
+      <div class="services-grid">
+        <div class="service-card gold-border" *ngFor="let s of barberServices">
+          <div class="service-top">
+            <span class="service-badge">{{ s.duration_min }} MIN</span>
+            <span class="service-price">${{ s.price_mxn }} MXN</span>
+          </div>
+          <h3>{{ s.name }}</h3>
+          <p>{{ s.description }}</p>
+          <button class="btn-book" (click)="openBooking(s)">Reservar Cita</button>
+        </div>
+      </div>
+
+      <!-- Gallery Showcase -->
+      <div class="gallery-section">
+        <h3 class="gold-gradient-text">Galería de Trabajos</h3>
+        <div class="gallery-grid">
+          <div class="gallery-item gold-border">
+            <img src="assets/corte_fade.jpg" alt="Corte Fade" />
+            <span>Master Fade</span>
+          </div>
+          <div class="gallery-item gold-border">
+            <img src="assets/corte_greca.jpg" alt="Diseño de Grecas" />
+            <span>Diseños & Grecas</span>
+          </div>
+          <div class="gallery-item gold-border">
+            <img src="assets/trenzas.jpg" alt="Trenzas Braids" />
+            <span>Braids / Trenzas</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BEAUTY DIVISION -->
+    <div *ngIf="activeTab === 'beauty'" class="division-view">
+      <div class="division-header">
+        <h2 class="gold-gradient-text">Salón de Belleza, Estilismo & Faciales</h2>
+        <p>Colorimetría avanzada, balayage, tratamientos anti-frizz, diseño de cejas y rejuvenecimiento.</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card gold-border" *ngFor="let s of beautyServices">
+          <div class="service-top">
+            <span class="service-badge">{{ s.duration_min }} MIN</span>
+            <span class="service-price">${{ s.price_mxn }} MXN</span>
+          </div>
+          <h3>{{ s.name }}</h3>
+          <p>{{ s.description }}</p>
+          <button class="btn-book" (click)="openBooking(s)">Agendar Cita</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACADEMY DIVISION -->
+    <div *ngIf="activeTab === 'academy'" class="division-view">
+      <div class="division-header">
+        <h2 class="gold-gradient-text">Academia de Capacitación Técnica</h2>
+        <p>Aprende de los mejores profesionales. Cursos prácticos desde cero y talleres de especialización.</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card gold-border" *ngFor="let s of academyServices">
+          <div class="service-top">
+            <span class="service-badge">DIPLOMA OFICIAL</span>
+            <span class="service-price">${{ s.price_mxn }} MXN</span>
+          </div>
+          <h3>{{ s.name }}</h3>
+          <p>{{ s.description }}</p>
+          <button class="btn-book" (click)="openBooking(s)">Solicitar Informes / Inscripción</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div class="modal-overlay" *ngIf="selectedService" (click)="closeBooking()">
+      <div class="modal-card gold-border" (click)="$event.stopPropagation()">
+        <h2 class="gold-gradient-text">Agendar en Black & White</h2>
+        <p class="modal-service-name"><strong>Servicio:</strong> {{ selectedService.name }} (${{ selectedService.price_mxn }} MXN)</p>
+
+        <form (submit)="submitBooking($event)">
+          <div class="form-group">
+            <label>Tu Nombre Completo:</label>
+            <input type="text" [(ngModel)]="bookingData.client_name" name="client_name" required placeholder="Ej. Juan Pérez" />
+          </div>
+
+          <div class="form-group">
+            <label>WhatsApp / Teléfono (Recibirás confirmación automática):</label>
+            <input type="text" [(ngModel)]="bookingData.client_phone" name="client_phone" required placeholder="Ej. 55 1234 5678" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Fecha de la Cita:</label>
+              <input type="date" [(ngModel)]="bookingData.appointment_date" name="appointment_date" required />
+            </div>
+            <div class="form-group">
+              <label>Hora deseada:</label>
+              <select [(ngModel)]="bookingData.appointment_time" name="appointment_time" required>
+                <option value="11:00">11:00 AM</option>
+                <option value="12:00">12:00 PM</option>
+                <option value="13:00">01:00 PM</option>
+                <option value="14:00">02:00 PM</option>
+                <option value="15:00">03:00 PM</option>
+                <option value="16:00">04:00 PM</option>
+                <option value="17:00">05:00 PM</option>
+                <option value="18:00">06:00 PM</option>
+                <option value="19:00">07:00 PM</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-cancel" (click)="closeBooking()">Cancelar</button>
+            <button type="submit" class="btn-confirm">Confirmar y Recibir WhatsApp</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Location and Contact Footer -->
+  <footer class="footer-section">
+    <div class="footer-info">
+      <h3 class="gold-gradient-text">BLACK & WHITE STUDIO</h3>
+      <p>📍 Amanecer Ranchero 93, Nezahualcóyotl, Estado de México, C.P. 57000</p>
+      <p>🕒 Horario: Lun a Sáb 11:00 AM - 8:00 PM (Miércoles cerrado) · Dom 12:00 PM - 5:00 PM</p>
+      <p>📲 Citas e Informes: <a href="https://wa.me/5215612825970" target="_blank" class="gold-link">56 1282 5970</a></p>
+    </div>
+  </footer>
+</div>
